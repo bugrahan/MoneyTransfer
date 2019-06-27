@@ -3,43 +3,37 @@ package com.revolut.bugrahan.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class User {
 
-    @JsonProperty("id")
     private long id;
 
-    @JsonProperty("name")
     private String name;
 
-    @JsonProperty("accountIdList")
     private List<Long> accountIdList;
 
-    @JsonProperty("userType")
     private UserType userType;
 
-    @JsonProperty("remainingWithdrawLimit")
     private double remainingWithdrawLimit;
 
-    @JsonProperty("remainingExchangeLimit")
     private double remainingExchangeLimit;
 
 
-    private User(long id, String name, UserType userType, double remainingWithdrawLimit, double remainingExchangeLimit) {
+    public User(@JsonProperty(value = "id", required = true) long id,
+                @JsonProperty(value = "name", required = true) String name,
+                @JsonProperty(value = "userType", required = true) UserType userType) {
         this.id = id;
         this.name = name;
-        this.accountIdList = new ArrayList<>();
         this.userType = userType;
-        this.remainingWithdrawLimit = remainingWithdrawLimit;
-        this.remainingExchangeLimit = remainingExchangeLimit;
+        this.accountIdList = Collections.EMPTY_LIST;
+        this.remainingWithdrawLimit = userType.getWithdrawLimit();
+        this.remainingExchangeLimit = userType.getExchangeLimit();
     }
 
 
-    public static User getInstance(long id, String name, UserType userType, double remainingWithdrawLimit, double remainingExchangeLimit) {
-        return new User(id, name, userType, remainingWithdrawLimit, remainingExchangeLimit);
-    }
 
     public long getId() {
         return id;
@@ -67,6 +61,14 @@ public class User {
 
     public double getRemainingExchangeLimit() {
         return remainingExchangeLimit;
+    }
+
+    public void setRemainingWithdrawLimit(double remainingWithdrawLimit) {
+        this.remainingWithdrawLimit = remainingWithdrawLimit;
+    }
+
+    public void setRemainingExchangeLimit(double remainingExchangeLimit) {
+        this.remainingExchangeLimit = remainingExchangeLimit;
     }
 
     @Override

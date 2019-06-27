@@ -3,6 +3,7 @@ package com.revolut.bugrahan.dbReplicas;
 import com.revolut.bugrahan.model.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class DatabaseReplica {
@@ -27,9 +28,9 @@ public class DatabaseReplica {
     }
 
     static {
-        User u1 = User.getInstance(1000L, "Bugrahan Memis", UserType.PREMIUM, UserType.PREMIUM.getWithdrawLimit(), UserType.PREMIUM.getExchangeLimit());
-        User u2 = User.getInstance(1001L, "Luke Skywalker", UserType.PREMIUM, UserType.PREMIUM.getWithdrawLimit(), UserType.PREMIUM.getExchangeLimit());
-        User u3 = User.getInstance(1002L, "Sherlock Holmes", UserType.STANDARD, UserType.STANDARD.getWithdrawLimit(), UserType.STANDARD.getExchangeLimit());
+        User u1 = new User(1000L, "Bugrahan Memis", UserType.PREMIUM);
+        User u2 = new User(1001L, "Luke Skywalker", UserType.PREMIUM);
+        User u3 = new User(1002L, "Sherlock Holmes", UserType.STANDARD);
         userHashMap.put(u1.getId(), u1);
         userHashMap.put(u2.getId(), u2);
         userHashMap.put(u3.getId(), u3);

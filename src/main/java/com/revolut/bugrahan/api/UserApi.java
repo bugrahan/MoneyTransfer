@@ -45,12 +45,12 @@ public class UserApi  {
 
     @POST
 
-    @Consumes({ "application/json" })
-
+    @Consumes("application/json")
+    @Produces("application/json")
     @Operation(summary = "Create user.", description = "", tags={ "user" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation.") })
-    public Response createUser(@Parameter(description = "Created user object." ,required=true) User body
+    public Response createUser(@Parameter(description = "Created user object." ,required=true) String body
 
             , @Context SecurityContext securityContext)
             throws com.revolut.bugrahan.api.NotFoundException {
@@ -98,9 +98,9 @@ public class UserApi  {
             @ApiResponse(responseCode = "400", description = "Invalid user supplied"),
 
             @ApiResponse(responseCode = "404", description = "User not found") })
-    public Response updateUser(@Parameter(description = "Updated user object" ,required=true) User body
+    public Response updateUser(@Parameter(description = "Updated user object" ,required=true) String body
 
-            , @Parameter(description = "name that need to be updated",required=true) @PathParam("id") Long id
+            , @Parameter(description = "name that need to be updated",required=true) @PathParam("id") long id
             , @Context SecurityContext securityContext)
             throws NotFoundException {
         return delegate.updateUser(body,id,securityContext);

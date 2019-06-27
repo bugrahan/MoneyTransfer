@@ -1,6 +1,11 @@
 package com.revolut.bugrahan.model;
 
-public enum UserType {
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.io.Serializable;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum UserType implements Serializable {
     PREMIUM("Premium", 1500, 5000),
     STANDARD("Standard", 900, 3000);
 
