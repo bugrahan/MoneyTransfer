@@ -2,6 +2,7 @@ package com.revolut.bugrahan.dbReplicas;
 
 import com.revolut.bugrahan.model.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,17 +36,20 @@ public class DatabaseReplica {
         userHashMap.put(u2.getId(), u2);
         userHashMap.put(u3.getId(), u3);
 
-        Account a1 = Account.getInstance(9001L, 1289.02, Currency.EUR, u1.getId());
-        Account a2 = Account.getInstance(9002L, 5000.02, Currency.TRY, u1.getId());
-        u1.setAccountIdList(Arrays.asList(a1.getId(), a2.getId()));
+        Account a1 = new Account(9001L, 1289.02, Currency.EUR, u1.getId());
+        Account a2 = new Account(9002L, 5000.02, Currency.TRY, u1.getId());
+        ArrayList arrayList = new ArrayList();
+        arrayList.add(a1.getId());
+        arrayList.add(a2.getId());
+        u1.setAccountIdList(arrayList);
 
-        Account a3 = Account.getInstance(9011L, 2989.00, Currency.GBP, u1.getId());
-        Account a4 = Account.getInstance(9012L, 554.67, Currency.TRY, u1.getId());
-        Account a5 = Account.getInstance(9013L, 15030.54, Currency.EUR, u1.getId());
-        u2.setAccountIdList(Arrays.asList(a3.getId(), a4.getId(), a5.getId()));
+        Account a3 = new Account(9011L, 2989.00, Currency.GBP, u1.getId());
+        Account a4 = new Account(9012L, 554.67, Currency.TRY, u1.getId());
+        Account a5 = new Account(9013L, 15030.54, Currency.EUR, u1.getId());
+        //u2.setAccountIdList(Arrays.asList(a3.getId(), a4.getId(), a5.getId()));
 
-        Account a6 = Account.getInstance(9021L, 9000.02, Currency.GBP, u1.getId());
-        u3.setAccountIdList(Arrays.asList(a6.getId()));
+        Account a6 = new Account(9021L, 9000.02, Currency.GBP, u1.getId());
+        //u3.setAccountIdList(Arrays.asList(a6.getId()));
 
         Transaction t1 = new Transaction(transactionHashMap.size()+1, 333, 444, 21, "GBP");
         transactionHashMap.put(t1.getId(), t1);

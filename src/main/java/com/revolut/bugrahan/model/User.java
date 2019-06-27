@@ -13,7 +13,7 @@ public class User {
 
     private String name;
 
-    private List<Long> accountIdList;
+    private ArrayList<Long> accountIdList;
 
     private UserType userType;
 
@@ -28,7 +28,7 @@ public class User {
         this.id = id;
         this.name = name;
         this.userType = userType;
-        this.accountIdList = Collections.EMPTY_LIST;
+        this.accountIdList = new ArrayList<>();
         this.remainingWithdrawLimit = userType.getWithdrawLimit();
         this.remainingExchangeLimit = userType.getExchangeLimit();
     }
@@ -47,8 +47,12 @@ public class User {
         return accountIdList;
     }
 
-    public void setAccountIdList(List<Long> accountIdList) {
+    public void setAccountIdList(ArrayList<Long> accountIdList) {
         this.accountIdList = accountIdList;
+    }
+
+    public void addAccountIdToAccountIdList(long accountId) {
+        this.accountIdList.add(accountId);
     }
 
     public UserType getAccountType() {

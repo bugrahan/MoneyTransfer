@@ -49,7 +49,7 @@ public class AccountApi {
     @Consumes
     @Operation(summary = "Create account.", description = "", tags={ "account" })
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successful operation.")})
-    public Response createAccount(@Parameter(description = "Created account object." ,required=true) Account body,
+    public Response createAccount(@Parameter(description = "Created account object." ,required=true) String body,
                                   @Context SecurityContext securityContext) throws NotFoundException {
         return delegate.createAccount(body, securityContext);
     }
@@ -75,7 +75,7 @@ public class AccountApi {
             @ApiResponse(responseCode = "200", description = "Successful operation.", content = @Content(schema = @Schema(implementation = Account.class))),
             @ApiResponse(responseCode = "400", description = "Invalid account ID supplied."),
             @ApiResponse(responseCode = "404", description = "Account not found.")})
-    public Response getAccountById(@Parameter(description = "The ID that needs to be fetched.", required = true) @PathParam("id") Long id,
+    public Response getAccountById(@Parameter(description = "The ID that needs to be fetched.", required = true) @PathParam("id") long id,
                                    @Context SecurityContext securityContext) throws NotFoundException {
         return delegate.getAccountById(id, securityContext);
     }
@@ -88,7 +88,7 @@ public class AccountApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Invalid account ID supplied."),
             @ApiResponse(responseCode = "404", description = "Account not found.")})
-    public Response updateAccount(@Parameter(description = "Updated account object.", required = true) Account body,
+    public Response updateAccount(@Parameter(description = "Updated account object.", required = true) String body,
                                   @Parameter(description = "The ID that needs to be updated.", required = true) @PathParam("id") long id,
                                   @Context SecurityContext securityContext) throws NotFoundException {
         return delegate.updateAccount(body, id, securityContext);

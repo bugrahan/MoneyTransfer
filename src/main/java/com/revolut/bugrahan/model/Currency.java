@@ -1,6 +1,11 @@
 package com.revolut.bugrahan.model;
 
-public enum Currency {
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.io.Serializable;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum Currency implements Serializable {
     GBP("GBP", 1.00, 1.02),
     EUR("EUR", 2.01, 2.03),
     TRY("TRY", 7.50, 7.55);
