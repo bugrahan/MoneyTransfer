@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
 
@@ -68,9 +69,34 @@ public class User {
         return remainingExchangeLimit;
     }
 
-    // TODO equals
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                Double.compare(user.remainingWithdrawLimit, remainingWithdrawLimit) == 0 &&
+                Double.compare(user.remainingExchangeLimit, remainingExchangeLimit) == 0 &&
+                name.equals(user.name) &&
+                Objects.equals(accountIdList, user.accountIdList) &&
+                userType == user.userType;
+    }
 
-    // TODO hashCode
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, accountIdList, userType, remainingWithdrawLimit, remainingExchangeLimit);
+    }
 
-    // TODO toString
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", accountIdList=" + accountIdList +
+                ", userType=" + userType +
+                ", remainingWithdrawLimit=" + remainingWithdrawLimit +
+                ", remainingExchangeLimit=" + remainingExchangeLimit +
+                '}';
+    }
 }

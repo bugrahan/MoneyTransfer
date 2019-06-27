@@ -27,11 +27,13 @@ public enum Currency {
         return sellingRate;
     }
 
-    // TODO equals
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "value='" + value + '\'' +
+                ", buyingRate=" + buyingRate +
+                ", sellingRate=" + sellingRate +
+                '}';
+    }
 
-    // TODO hashCode
-
-    // TODO toString
-
-    // TODO JSON Createor?
 }

@@ -2,6 +2,8 @@ package com.revolut.bugrahan.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class Transaction {
     @JsonProperty("id")
     private long id;
@@ -50,9 +52,31 @@ public class Transaction {
         return currencyCode;
     }
 
-    // TODO equals
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return id == that.id &&
+                from == that.from &&
+                to == that.to &&
+                Double.compare(that.amount, amount) == 0 &&
+                currencyCode.equals(that.currencyCode);
+    }
 
-    // TODO hashCode
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, from, to, amount, currencyCode);
+    }
 
-    // TODO toString
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", from=" + from +
+                ", to=" + to +
+                ", amount=" + amount +
+                ", currencyCode='" + currencyCode + '\'' +
+                '}';
+    }
 }

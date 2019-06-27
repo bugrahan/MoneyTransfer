@@ -26,12 +26,12 @@ public enum UserType {
         return exchangeLimit;
     }
 
-
-    // TODO equals
-
-    // TODO hashCode
-
-    // TODO toString
-
-    // TODO JSON Createor?
+    @Override
+    public String toString() {
+        return "UserType{" +
+                "value='" + value + '\'' +
+                ", withdrawLimit=" + withdrawLimit +
+                ", exchangeLimit=" + exchangeLimit +
+                '}';
+    }
 }
