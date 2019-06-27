@@ -46,7 +46,7 @@ public class DatabaseReplica {
         Account a6 = Account.getInstance(9021L, 9000.02, Currency.GBP, u1.getId());
         u3.setAccountIdList(Arrays.asList(a6.getId()));
 
-        Transaction t1 = Transaction.getInstance(transactionHashMap.size()+1, 333, 444, 21, "GBP");
+        Transaction t1 = new Transaction(transactionHashMap.size()+1, 333, 444, 21, "GBP");
         transactionHashMap.put(t1.getId(), t1);
     }
 

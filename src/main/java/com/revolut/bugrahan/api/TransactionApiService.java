@@ -6,5 +6,5 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 public abstract class TransactionApiService {
-    public abstract Response createTransaction(Transaction body, SecurityContext securityContext) throws NotFoundException;
+    public abstract Response createTransaction(String body, SecurityContext securityContext) throws NotFoundException;
 }

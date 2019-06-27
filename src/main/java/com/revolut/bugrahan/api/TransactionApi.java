@@ -41,14 +41,12 @@ public class TransactionApi {
     }
 
     @POST
-    @Consumes
-    @Operation(summary = "Create transaction", description = "", tags={ "transaction" })
+    @Consumes("application/json")
+    @Operation(summary = "Create transaction", tags={ "transaction" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation") })
-    public Response createTransaction(@Parameter(description = "Created transaction object" ,required=true) Transaction body
-
-            , @Context SecurityContext securityContext)
-            throws NotFoundException {
+    public Response createTransaction(@Parameter(description = "Created transaction object" ,required=true) String body,
+                                      @Context SecurityContext securityContext) throws NotFoundException {
         return delegate.createTransaction(body,securityContext);
     }
 }

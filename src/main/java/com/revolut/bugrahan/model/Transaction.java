@@ -1,26 +1,25 @@
 package com.revolut.bugrahan.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 
 public class Transaction {
-    @JsonProperty("id")
     private long id;
-
-    @JsonProperty("from")
     private long from;
-
-    @JsonProperty("to")
     private long to;
-
-    @JsonProperty("amount")
     private double amount;
-
-    @JsonProperty("currencyCode")
     private String currencyCode;
 
-    private Transaction(long id, long from, long to, double amount, String currencyCode) {
+    @JsonCreator
+    public Transaction(@JsonProperty(value = "id", required = true) long id,
+                       @JsonProperty(value = "from", required = true) long from,
+                       @JsonProperty(value = "to", required = true) long to,
+                       @JsonProperty(value = "amount", required = true) double amount,
+                       @JsonProperty(value = "currencyCode", required = true) String currencyCode) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -28,26 +27,19 @@ public class Transaction {
         this.currencyCode = currencyCode;
     }
 
-    public static Transaction getInstance(long id, long from, long to, double amount, String currency) {
-        return new Transaction(id, from, to, amount, currency);
-    }
 
     public long getId() {
         return id;
     }
-
     public long getFrom() {
         return from;
     }
-
     public long getTo() {
         return to;
     }
-
     public double getAmount() {
         return amount;
     }
-
     public String getCurrencyCode() {
         return currencyCode;
     }
