@@ -2,6 +2,7 @@ package com.revolut.bugrahan.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +56,7 @@ public class User {
         this.accountIdList.add(accountId);
     }
 
-    public UserType getAccountType() {
+    public UserType getUserType() {
         return userType;
     }
 

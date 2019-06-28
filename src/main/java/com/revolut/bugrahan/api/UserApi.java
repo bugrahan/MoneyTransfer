@@ -49,7 +49,8 @@ public class UserApi  {
     @Produces("application/json")
     @Operation(summary = "Create user.", description = "", tags={ "user" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation.") })
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "400", description = "Failed operation.")})
     public Response createUser(@Parameter(description = "Created user object." ,required=true) String body
 
             , @Context SecurityContext securityContext)
