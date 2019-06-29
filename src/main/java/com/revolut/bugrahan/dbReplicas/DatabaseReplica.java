@@ -42,6 +42,8 @@ public class DatabaseReplica {
         arrayList.add(a1.getId());
         arrayList.add(a2.getId());
         u1.setAccountIdList(arrayList);
+        accountHashMap.put(a1.getId(), a1);
+        accountHashMap.put(a2.getId(), a2);
 
         Account a3 = new Account(9011L, 2989.00, Currency.GBP, u1.getId());
         Account a4 = new Account(9012L, 554.67, Currency.TRY, u1.getId());

@@ -33,7 +33,7 @@ public class Account {
         return currency;
     }
 
-    public long getOwner() {
+    public long getOwnerId() {
         return ownerId;
     }
 

@@ -53,7 +53,13 @@ public class User {
     }
 
     public void addAccountIdToAccountIdList(long accountId) {
-        this.accountIdList.add(accountId);
+        this.getAccountIdList().add(accountId);
+    }
+
+    public void deleteAccountIdFromAccountIdList(long accountId) {
+        if (this.getAccountIdList().contains(accountId)) {
+            this.getAccountIdList().remove(accountId);
+        }
     }
 
     public UserType getUserType() {
