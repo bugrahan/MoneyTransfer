@@ -5,7 +5,10 @@ import com.revolut.bugrahan.api.ApiResponseMessage;
 import com.revolut.bugrahan.api.NotFoundException;
 import com.revolut.bugrahan.api.TransactionApiService;
 import com.revolut.bugrahan.dbReplicas.DatabaseReplica;
+import com.revolut.bugrahan.model.Account;
+import com.revolut.bugrahan.model.Currency;
 import com.revolut.bugrahan.model.Transaction;
+import com.revolut.bugrahan.model.User;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -15,16 +18,111 @@ public class TransactionApiServiceImpl extends TransactionApiService {
     @Override
     public Response createTransaction(String body, SecurityContext securityContext) throws NotFoundException {
         // do some magic!
-        int size = DatabaseReplica.getTransactionHashMap().size();
         ObjectMapper mapper = new ObjectMapper();
-        Transaction transaction = null;
+        Transaction transaction;
         try {
             transaction = mapper.readValue(body, Transaction.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, e.toString())).build();
         }
-        //Transaction newTransaction = Transaction.getInstance(size+1, body.getFrom(), body.getTo(), body.getAmount(), body.getCurrencyCode());
-        DatabaseReplica.getTransactionHashMap().put((long)size+1, transaction);
-        return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+
+        if (checkTransaction(transaction).getStatus() == 404) {
+            return checkTransaction(transaction);
+        }
+
+        applyTransaction(transaction);
+
+        return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "Transaction done!")).build();
     }
+
+    private Response checkTransaction(Transaction transaction) {
+        if (!isSenderAccountExists(transaction)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR,
+                    "Sender account doesn't exist.")).build();
+        } else if (!isReceiverAccountExists(transaction)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR,
+                    "Receiver account doesn't exist.")).build();
+        } else if (!isTransactionCurrencyMatchToSendersAccount(transaction)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR,
+                    "Sender's account is not a " + transaction.getCurrencyCode() + " account.")).build();
+        } else if (!isTransactionCurrencyMatchToReceiversAccount(transaction)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR,
+                    "Receiver's account is not a " + transaction.getCurrencyCode() + " account.")).build();
+        } else if (!isTransactionCurrenciesMatch(transaction)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR,
+                    "Sender's and receiver's accounts doesn't match.")).build();
+        } else if (!hasSenderEnoughLimit(transaction)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR,
+                    "Sender doesn't have enough limit.")).build();
+        } else if (!isThereEnoughMoneyInTheSendersAccount(transaction)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR,
+                    "Sender doesn't have enough money to send.")).build();
+        }
+
+        return Response.status(200).build();
+    }
+
+
+    @Override
+    public boolean isSenderAccountExists(Transaction transaction) {
+        return DatabaseReplica.getAccountHashMap().containsKey(transaction.getFrom());
+    }
+
+    @Override
+    public boolean isReceiverAccountExists(Transaction transaction) {
+        return DatabaseReplica.getAccountHashMap().containsKey(transaction.getTo());
+    }
+
+    @Override
+    public boolean isTransactionCurrenciesMatch(Transaction transaction) {
+        return DatabaseReplica.getAccountHashMap().get(transaction.getFrom()).getCurrency().equals(
+                DatabaseReplica.getAccountHashMap().get(transaction.getTo()).getCurrency());
+    }
+
+    @Override
+    public boolean isTransactionCurrencyMatchToSendersAccount(Transaction transaction) {
+        return DatabaseReplica.getAccountHashMap().get(transaction.getFrom()).getCurrency().getValue().equals(transaction.getCurrencyCode());
+    }
+
+    @Override
+    public boolean isTransactionCurrencyMatchToReceiversAccount(Transaction transaction) {
+        return DatabaseReplica.getAccountHashMap().get(transaction.getTo()).getCurrency().getValue().equals(transaction.getCurrencyCode());
+    }
+
+    @Override
+    public boolean hasSenderEnoughLimit(Transaction transaction) {
+        Account senderAccount = DatabaseReplica.getAccountHashMap().get(transaction.getFrom());
+        User sender = DatabaseReplica.getUserHashMap().get(senderAccount.getOwnerId());
+        double limit = sender.getRemainingExchangeLimit();
+        double amountInGBP = getAmountInGBP(transaction.getAmount(), transaction.getCurrencyCode());
+        return limit >= amountInGBP;
+    }
+
+    @Override
+    public boolean isThereEnoughMoneyInTheSendersAccount(Transaction transaction) {
+        return DatabaseReplica.getAccountHashMap().get(transaction.getFrom()).getBalance() >= transaction.getAmount();
+    }
+
+
+
+
+    private double getAmountInGBP(double amount, String currencyCode) {
+        if (currencyCode.equals(Currency.GBP.getValue())) {
+            return amount;
+        } else {
+            return Currency.valueOf(currencyCode).getSellingRate() * amount;
+        }
+    }
+
+
+    public void applyTransaction(Transaction transaction) {
+        int size = DatabaseReplica.getTransactionHashMap().size();
+        DatabaseReplica.getTransactionHashMap().put((long)size+1, transaction);
+        Account senderAccount = DatabaseReplica.getAccountHashMap().get(transaction.getFrom());
+        senderAccount.setBalance(senderAccount.getBalance() - transaction.getAmount());
+        Account receiverAccount = DatabaseReplica.getAccountHashMap().get(transaction.getTo());
+        receiverAccount.setBalance(receiverAccount.getBalance() + transaction.getAmount());
+    }
+
+
 }

@@ -52,8 +52,10 @@ public class User {
         this.accountIdList = accountIdList;
     }
 
-    public void addAccountIdToAccountIdList(long accountId) {
-        this.getAccountIdList().add(accountId);
+    public void addAccountIdToAccountIdList(long... accountId) {
+        for (long id : accountId) {
+            this.getAccountIdList().add(id);
+        }
     }
 
     public void deleteAccountIdFromAccountIdList(long accountId) {
