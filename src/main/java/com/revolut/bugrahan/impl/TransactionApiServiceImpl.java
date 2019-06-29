@@ -93,7 +93,7 @@ public class TransactionApiServiceImpl extends TransactionApiService {
     public boolean hasSenderEnoughLimit(Transaction transaction) {
         Account senderAccount = DatabaseReplica.getAccountHashMap().get(transaction.getFrom());
         User sender = DatabaseReplica.getUserHashMap().get(senderAccount.getOwnerId());
-        double limit = sender.getRemainingExchangeLimit();
+        double limit = sender.getRemainingTransferLimit();
         double amountInGBP = getAmountInGBP(transaction.getAmount(), transaction.getCurrencyCode());
         return limit >= amountInGBP;
     }

@@ -2,25 +2,17 @@ package com.revolut.bugrahan.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class User {
 
     private long id;
-
     private String name;
-
     private ArrayList<Long> accountIdList;
-
     private UserType userType;
-
-    private double remainingWithdrawLimit;
-
-    private double remainingExchangeLimit;
+    private double remainingTransferLimit;
 
 
     public User(@JsonProperty(value = "id", required = true) long id,
@@ -30,10 +22,8 @@ public class User {
         this.name = name;
         this.userType = userType;
         this.accountIdList = new ArrayList<>();
-        this.remainingWithdrawLimit = userType.getWithdrawLimit();
-        this.remainingExchangeLimit = userType.getExchangeLimit();
+        this.remainingTransferLimit = userType.getTransferLimit();
     }
-
 
 
     public long getId() {
@@ -52,9 +42,9 @@ public class User {
         this.accountIdList = accountIdList;
     }
 
-    public void addAccountIdToAccountIdList(long... accountId) {
-        for (long id : accountId) {
-            this.getAccountIdList().add(id);
+    public void addAccountIdsToAccountIdList(long... accountIds) {
+        for (long accountId : accountIds) {
+            this.getAccountIdList().add(accountId);
         }
     }
 
@@ -68,20 +58,13 @@ public class User {
         return userType;
     }
 
-    public double getRemainingWithdrawLimit() {
-        return remainingWithdrawLimit;
+
+    public double getRemainingTransferLimit() {
+        return remainingTransferLimit;
     }
 
-    public double getRemainingExchangeLimit() {
-        return remainingExchangeLimit;
-    }
-
-    public void setRemainingWithdrawLimit(double remainingWithdrawLimit) {
-        this.remainingWithdrawLimit = remainingWithdrawLimit;
-    }
-
-    public void setRemainingExchangeLimit(double remainingExchangeLimit) {
-        this.remainingExchangeLimit = remainingExchangeLimit;
+    public void setRemainingTransferLimit(double remainingTransferLimit) {
+        this.remainingTransferLimit = remainingTransferLimit;
     }
 
     @Override
@@ -90,28 +73,12 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id == user.id &&
-                Double.compare(user.remainingWithdrawLimit, remainingWithdrawLimit) == 0 &&
-                Double.compare(user.remainingExchangeLimit, remainingExchangeLimit) == 0 &&
-                name.equals(user.name) &&
-                Objects.equals(accountIdList, user.accountIdList) &&
+                Objects.equals(name, user.name) &&
                 userType == user.userType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, accountIdList, userType, remainingWithdrawLimit, remainingExchangeLimit);
-    }
-
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", accountIdList=" + accountIdList +
-                ", userType=" + userType +
-                ", remainingWithdrawLimit=" + remainingWithdrawLimit +
-                ", remainingExchangeLimit=" + remainingExchangeLimit +
-                '}';
+        return Objects.hash(id, userType);
     }
 }

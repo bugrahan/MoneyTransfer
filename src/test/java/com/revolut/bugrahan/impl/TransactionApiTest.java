@@ -55,16 +55,16 @@ public class TransactionApiTest extends JerseyTest {
 
         Account jo_eur = new Account(12011, 100, Currency.EUR, 7001);
         Account jo_gbp = new Account(12012, 50, Currency.EUR, 7001);
-        joey.addAccountIdToAccountIdList(12011, 12012);
+        joey.addAccountIdsToAccountIdList(12011, 12012);
 
         Account ch_eur = new Account(12021, 13000, Currency.EUR, 7002);
         Account ch_gbp = new Account(12022, 4000, Currency.GBP, 7002);
         Account ch_try = new Account(12023, 1000, Currency.TRY, 7002);
-        chandler.addAccountIdToAccountIdList(12011, 12012, 12013);
+        chandler.addAccountIdsToAccountIdList(12011, 12012, 12013);
 
         Account ra_gbp = new Account(12031, 200, Currency.GBP, 7003);
         Account ra_try = new Account(12032, 0, Currency.TRY, 7003);
-        rachel.addAccountIdToAccountIdList(12031, 12032);
+        rachel.addAccountIdsToAccountIdList(12031, 12032);
 
         DatabaseReplica.getAccountHashMap().put(jo_eur.getId(), jo_eur);
         DatabaseReplica.getAccountHashMap().put(ch_eur.getId(), ch_eur);
