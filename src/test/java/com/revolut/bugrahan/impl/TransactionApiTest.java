@@ -172,11 +172,11 @@ public class TransactionApiTest extends JerseyTest {
     @Test
     public void applyTransaction() {
         Transaction transaction = new Transaction(1, 12021, 12011, 1000, "EUR");
-        double chandlersBalance = DatabaseReplica.getAccountHashMap().get(transaction.getFrom()).getBalance();
-        double joeysBalance = DatabaseReplica.getAccountHashMap().get(transaction.getTo()).getBalance();
+        double chandlersBalance = DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getBalance();
+        double joeysBalance = DatabaseReplica.getAccountHashMap().get(transaction.getReceiverAccountId()).getBalance();
         service.applyTransaction(transaction);
-        double chandlersNewBalance = DatabaseReplica.getAccountHashMap().get(transaction.getFrom()).getBalance();
-        double joeysNewBalance = DatabaseReplica.getAccountHashMap().get(transaction.getTo()).getBalance();
+        double chandlersNewBalance = DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getBalance();
+        double joeysNewBalance = DatabaseReplica.getAccountHashMap().get(transaction.getReceiverAccountId()).getBalance();
         assertEquals(chandlersBalance - 1000, chandlersNewBalance, 0.001);
         assertEquals(joeysBalance + 1000, joeysNewBalance, 0.001);
 
