@@ -2,7 +2,6 @@ package com.revolut.bugrahan.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.revolut.bugrahan.Util;
 import com.revolut.bugrahan.api.AccountApiService;
 import com.revolut.bugrahan.api.ApiResponseMessage;
@@ -10,7 +9,6 @@ import com.revolut.bugrahan.api.NotFoundException;
 import com.revolut.bugrahan.dbReplicas.DatabaseReplica;
 import com.revolut.bugrahan.model.Account;
 import com.revolut.bugrahan.model.User;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -44,7 +42,7 @@ public class AccountApiServiceImpl extends AccountApiService {
 
 
         DatabaseReplica.getAccountHashMap().put(account.getId(), account);
-        DatabaseReplica.getUserHashMap().get(account.getOwnerId()).addAccountIdToAccountIdList(account.getId());
+        DatabaseReplica.getUserHashMap().get(account.getOwnerId()).addAccountIdsToAccountIdList(account.getId());
         return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "Account created.")).build();
     }
     @Override
