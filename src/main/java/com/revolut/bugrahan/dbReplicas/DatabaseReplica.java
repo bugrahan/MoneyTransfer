@@ -49,9 +49,9 @@ public class DatabaseReplica {
         Account a4 = new Account(9012L, 554.67, Currency.TRY, u1.getId());
         Account a5 = new Account(9013L, 15030.54, Currency.EUR, u1.getId());
         arrayList = new ArrayList();
-        arrayList.add(a3);
-        arrayList.add(a4);
-        arrayList.add(a5);
+        arrayList.add(a3.getId());
+        arrayList.add(a4.getId());
+        arrayList.add(a5.getId());
         u2.setAccountIdList(arrayList);
         accountHashMap.put(a3.getId(), a3);
         accountHashMap.put(a4.getId(), a4);
@@ -59,7 +59,7 @@ public class DatabaseReplica {
 
         Account a6 = new Account(9021L, 0, Currency.GBP, u1.getId());
         arrayList = new ArrayList();
-        arrayList.add(a6);
+        arrayList.add(a6.getId());
         u3.setAccountIdList(arrayList);
         accountHashMap.put(a6.getId(), a6);
 

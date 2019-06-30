@@ -1,6 +1,8 @@
 package com.revolut.bugrahan.impl;
 
 import com.revolut.bugrahan.Main;
+import com.revolut.bugrahan.api.AccountApiService;
+import com.revolut.bugrahan.api.UserApiService;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -75,15 +77,33 @@ public class UserApiTest extends JerseyTest {
         assertEquals(404, response.getStatus());
     }
 
-    //@Test
-    public void testDeleteUser_exist() {
-        Response response = target.path("user/1000").request(MediaType.APPLICATION_JSON).get();
+    @Test
+    public void isBalanceGreaterThanZero_yes() {
+        UserApiService service = new UserApiServiceImpl();
+        assertTrue(service.isBalanceGreaterThanZero(1000L));
+    }
+
+    @Test
+    public void isBalanceGreaterThanZero_no() {
+        UserApiService service = new UserApiServiceImpl();
+        assertFalse(service.isBalanceGreaterThanZero(1002L));
+    }
+
+    @Test
+    public void deleteUser_exist_withoutBalance() {
+        Response response = target.path("user/1002").request(MediaType.APPLICATION_JSON).delete();
         assertEquals(200, response.getStatus());
     }
 
-    //@Test
-    public void testDeleteUser_does_not_exist() {
-        Response response = target.path("user/0000").request(MediaType.APPLICATION_JSON).get();
+    @Test
+    public void deleteUser_exist_withBalance() {
+        Response response = target.path("user/1000").request(MediaType.APPLICATION_JSON).delete();
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    public void deleteUser_notExist() {
+        Response response = target.path("user/0000").request(MediaType.APPLICATION_JSON).delete();
         assertEquals(404, response.getStatus());
     }
 }

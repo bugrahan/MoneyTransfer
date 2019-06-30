@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -47,6 +48,9 @@ public class UserApiServiceImpl extends UserApiService {
         if (!DatabaseReplica.getUserHashMap().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
         } else {
+            if (isBalanceGreaterThanZero(id)) {
+                return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User with balance cannot be deleted.")).build();
+            }
             DatabaseReplica.getUserHashMap().remove(id);
             return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "User deleted!")).build();
 
@@ -70,5 +74,16 @@ public class UserApiServiceImpl extends UserApiService {
     public Response updateUser(String  body, long id, SecurityContext securityContext) throws NotFoundException {
         // do some magic!
         return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+    }
+
+    @Override
+    public boolean isBalanceGreaterThanZero(long userId) {
+        for (Long accountId : DatabaseReplica.getUserHashMap().get(userId).getAccountIdList()) {
+            if (DatabaseReplica.getAccountHashMap().get(accountId).getBalance() > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

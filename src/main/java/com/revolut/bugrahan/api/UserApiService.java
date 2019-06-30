@@ -13,4 +13,6 @@ public abstract class UserApiService {
     public abstract Response getUserById(long id, SecurityContext securityContext) throws NotFoundException;
 
     public abstract Response updateUser(String body, long id, SecurityContext securityContext) throws NotFoundException;
+
+    public abstract boolean isBalanceGreaterThanZero(long id);
 }
