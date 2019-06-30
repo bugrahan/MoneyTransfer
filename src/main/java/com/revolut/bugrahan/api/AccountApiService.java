@@ -1,7 +1,5 @@
 package com.revolut.bugrahan.api;
 
-import com.revolut.bugrahan.model.Account;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 

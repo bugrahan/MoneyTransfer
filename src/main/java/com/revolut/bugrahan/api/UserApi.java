@@ -1,14 +1,8 @@
 package com.revolut.bugrahan.api;
 
-import com.revolut.bugrahan.api.NotFoundException;
-import com.revolut.bugrahan.api.UserApiService;
 import com.revolut.bugrahan.factories.UserApiServiceFactory;
-import com.revolut.bugrahan.model.Account;
-import com.revolut.bugrahan.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -19,7 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 @Path("/user")
-public class UserApi  {
+public class UserApi {
     private final UserApiService delegate;
 
     public UserApi(@Context ServletConfig servletContext) {
@@ -48,48 +42,40 @@ public class UserApi  {
 
     @Consumes("application/json")
     @Produces("application/json")
-    @Operation(summary = "Create user.", description = "", tags={ "user" })
+    @Operation(summary = "Create user.", description = "", tags = {"user"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation."),
-            @ApiResponse(responseCode = "400", description = "Failed operation.")})
-    public Response createUser(@Parameter(description = "Created user object." ,required=true) String body
-
-            , @Context SecurityContext securityContext)
-            throws com.revolut.bugrahan.api.NotFoundException {
-        return delegate.createUser(body,securityContext);
+            @ApiResponse(responseCode = "404", description = "Failed operation.")})
+    public Response createUser(@Parameter(description = "Created user object.", required = true) String body,
+                               @Context SecurityContext securityContext) throws com.revolut.bugrahan.api.NotFoundException {
+        return delegate.createUser(body, securityContext);
     }
-
 
 
     @DELETE
     @Path("/{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    @Operation(summary = "Delete user", description = "This can only be done by the logged in user.", tags={ "user" })
+    @Operation(summary = "Delete user", tags = {"user"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "400", description = "Invalid username supplied"),
-
-            @ApiResponse(responseCode = "404", description = "User not found") })
-    public Response deleteUser(@Parameter(description = "The name that needs to be deleted",required=true) @PathParam("id") long id
-            , @Context SecurityContext securityContext)
-            throws com.revolut.bugrahan.api.NotFoundException {
-        return delegate.deleteUser(id,securityContext);
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "404", description = "Failed operation.")})
+    public Response deleteUser(@Parameter(description = "The id that needs to be deleted", required = true) @PathParam("id") long id,
+                               @Context SecurityContext securityContext) throws com.revolut.bugrahan.api.NotFoundException {
+        return delegate.deleteUser(id, securityContext);
     }
+
     @GET
     @Path("/{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    @Operation(summary = "Get user by user id", description = "", tags={ "user" })
+    @Operation(summary = "Get user by user id", description = "", tags = {"user"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = User.class))),
-
-            @ApiResponse(responseCode = "400", description = "Invalid user id supplied"),
-
-            @ApiResponse(responseCode = "404", description = "User not found") })
-    public Response getUserById(@Parameter(description = "The name that needs to be fetched. Use user1 for testing. ",required=true) @PathParam("id") long id
-            , @Context SecurityContext securityContext)
-            throws com.revolut.bugrahan.api.NotFoundException {
-        return delegate.getUserById(id,securityContext);
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "404", description = "Failed operation.")})
+    public Response getUserById(@Parameter(description = "The id that needs to be fetched.", required = true) @PathParam("id") long id,
+                                @Context SecurityContext securityContext) throws com.revolut.bugrahan.api.NotFoundException {
+        return delegate.getUserById(id, securityContext);
     }
 
     @GET
@@ -98,12 +84,11 @@ public class UserApi  {
     @Produces("application/json")
     @Operation(summary = "Get user's account by account id", description = "", tags = {"user"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Account.class))),
-            @ApiResponse(responseCode = "404", description = "User not found")})
-    public Response getAccountById(@Parameter(description = "User ID", required = true) @PathParam("id") long id,
-                                   @Parameter(description = "Account ID", required = true) @PathParam("accountId") long accountId,
-                                   @Context SecurityContext securityContext)
-            throws com.revolut.bugrahan.api.NotFoundException {
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "404", description = "Failed operation.")})
+    public Response getAccountById(@Parameter(description = "User id", required = true) @PathParam("id") long id,
+                                   @Parameter(description = "Account id", required = true) @PathParam("accountId") long accountId,
+                                   @Context SecurityContext securityContext) throws com.revolut.bugrahan.api.NotFoundException {
         return delegate.getAccountById(id, accountId, securityContext);
     }
 
@@ -112,13 +97,13 @@ public class UserApi  {
     @Path("/{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    @Operation(summary = "Updated user", tags={ "user" })
+    @Operation(summary = "Updated user", tags = {"user"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation"),
-            @ApiResponse(responseCode = "404", description = "User not found") })
-    public Response updateUser(@Parameter(description = "Updated user object" ,required=true) String body,
-                               @Parameter(description = "name that need to be updated",required=true) @PathParam("id") long id,
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "404", description = "Failed operation.")})
+    public Response updateUser(@Parameter(description = "Updated user object", required = true) String body,
+                               @Parameter(description = "The id that need to be updated.", required = true) @PathParam("id") long id,
                                @Context SecurityContext securityContext) throws NotFoundException {
-        return delegate.updateUser(body,id,securityContext);
+        return delegate.updateUser(body, id, securityContext);
     }
 }

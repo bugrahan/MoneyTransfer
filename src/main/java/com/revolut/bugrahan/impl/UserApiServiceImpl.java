@@ -32,7 +32,7 @@ public class UserApiServiceImpl extends UserApiService {
 
         if (user == null) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot be created.")).build();
-        } else if(user.getId() == 0 || StringUtils.isEmpty(user.getName()) || user.getUserType() == null) {
+        } else if (user.getId() == 0 || StringUtils.isEmpty(user.getName()) || user.getUserType() == null) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Missing information.")).build();
         } else if (DatabaseReplica.getUserHashtable().containsKey(user.getId())) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User already exists.")).build();
@@ -87,7 +87,7 @@ public class UserApiServiceImpl extends UserApiService {
     }
 
     @Override
-    public synchronized Response updateUser(String  body, long id, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response updateUser(String body, long id, SecurityContext securityContext) throws NotFoundException {
         if (!DatabaseReplica.getUserHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
         }

@@ -114,6 +114,7 @@ public class TransactionApiTest extends JerseyTest {
         Transaction transaction = new Transaction(12021, 12011, 10000, "EUR");
         assertTrue(service.isTransactionCurrenciesMatch(transaction));
     }
+
     @Test
     public void isTransactionCurrenciesMatch_doesnt_match() {
         Transaction transaction = new Transaction(12022, 12011, 10000, "EUR");

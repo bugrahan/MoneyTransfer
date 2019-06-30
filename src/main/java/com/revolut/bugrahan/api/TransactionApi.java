@@ -1,7 +1,6 @@
 package com.revolut.bugrahan.api;
 
 import com.revolut.bugrahan.factories.TransactionApiServiceFactory;
-import com.revolut.bugrahan.model.Transaction;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,12 +43,13 @@ public class TransactionApi {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    @Operation(summary = "Create transaction", tags={ "transaction" })
+    @Operation(summary = "Create transaction.", tags = {"transaction"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation") })
-    public Response createTransaction(@Parameter(description = "Created transaction object" ,required=true) String body,
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "404", description = "Failed operation.")})
+    public Response createTransaction(@Parameter(description = "Created transaction object", required = true) String body,
                                       @Context SecurityContext securityContext) throws NotFoundException {
-        return delegate.createTransaction(body,securityContext);
+        return delegate.createTransaction(body, securityContext);
     }
 }
 

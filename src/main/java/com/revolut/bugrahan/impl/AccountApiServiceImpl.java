@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 public class AccountApiServiceImpl extends AccountApiService {
 
     @Override
-    public synchronized Response createAccount(String  body, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response createAccount(String body, SecurityContext securityContext) throws NotFoundException {
         ObjectMapper mapper = new ObjectMapper();
-        Account account = null;
+        Account account;
         try {
             account = mapper.readValue(body, Account.class);
         } catch (IOException e) {
@@ -33,7 +33,7 @@ public class AccountApiServiceImpl extends AccountApiService {
 
         if (account == null) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Account cannot be created.")).build();
-        } else if(account.getId() == 0 || account.getOwnerId() == 0 || account.getBalance() <= 0 || account.getCurrency() == null) {
+        } else if (account.getId() == 0 || account.getOwnerId() == 0 || account.getBalance() <= 0 || account.getCurrency() == null) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Missing information.")).build();
         } else if (DatabaseReplica.getAccountHashtable().containsKey(account.getId())) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Account already exists.")).build();
@@ -46,6 +46,7 @@ public class AccountApiServiceImpl extends AccountApiService {
         DatabaseReplica.getUserHashtable().get(account.getOwnerId()).addAccountIdsToAccountIdList(account.getId());
         return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "Account created.")).build();
     }
+
     @Override
     public synchronized Response deleteAccount(long id, SecurityContext securityContext) throws NotFoundException {
         if (!DatabaseReplica.getAccountHashtable().containsKey(id)) {
@@ -61,6 +62,7 @@ public class AccountApiServiceImpl extends AccountApiService {
 
         }
     }
+
     @Override
     public Response getAccountById(long id, SecurityContext securityContext) throws NotFoundException {
         if (!DatabaseReplica.getAccountHashtable().containsKey(id)) {
@@ -74,6 +76,7 @@ public class AccountApiServiceImpl extends AccountApiService {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, e.toString())).build();
         }
     }
+
     @Override
     public synchronized Response updateAccount(String body, long id, SecurityContext securityContext) throws NotFoundException {
         if (!DatabaseReplica.getAccountHashtable().containsKey(id)) {

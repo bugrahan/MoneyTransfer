@@ -11,6 +11,7 @@ public abstract class UserApiService {
     public abstract Response deleteUser(long id, SecurityContext securityContext) throws NotFoundException;
 
     public abstract Response getUserById(long id, SecurityContext securityContext) throws NotFoundException;
+
     public abstract Response getAccountById(long id, long accountId, SecurityContext securityContext) throws NotFoundException;
 
     public abstract Response updateUser(String body, long id, SecurityContext securityContext) throws NotFoundException;

@@ -8,4 +8,5 @@ public class AccountApiServiceFactory {
 
     public static AccountApiService getAccountApi() {
         return service;
-    }}
+    }
+}

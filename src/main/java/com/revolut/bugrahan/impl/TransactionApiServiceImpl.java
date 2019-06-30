@@ -17,7 +17,6 @@ import java.io.IOException;
 public class TransactionApiServiceImpl extends TransactionApiService {
     @Override
     public synchronized Response createTransaction(String body, SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
         ObjectMapper mapper = new ObjectMapper();
         Transaction transaction;
         try {
@@ -104,8 +103,6 @@ public class TransactionApiServiceImpl extends TransactionApiService {
     }
 
 
-
-
     private double getAmountInGBP(double amount, String currencyCode) {
         if (currencyCode.equals(Currency.GBP.getValue())) {
             return amount;
@@ -117,7 +114,7 @@ public class TransactionApiServiceImpl extends TransactionApiService {
 
     public void applyTransaction(Transaction transaction) {
         int size = DatabaseReplica.getTransactionHashtable().size();
-        DatabaseReplica.getTransactionHashtable().put((long)size+1, transaction);
+        DatabaseReplica.getTransactionHashtable().put((long) size + 1, transaction);
         Account senderAccount = DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId());
         senderAccount.setBalance(senderAccount.getBalance() - transaction.getAmount());
         User sender = DatabaseReplica.getUserHashtable().get(senderAccount.getOwnerId());

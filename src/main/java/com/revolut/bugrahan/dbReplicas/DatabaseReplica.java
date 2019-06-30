@@ -5,6 +5,7 @@ import com.revolut.bugrahan.model.Currency;
 
 import java.util.*;
 
+/* SAMPLE DATABASE */
 public class DatabaseReplica {
     public DatabaseReplica() {
         // Left blank on purpose.
