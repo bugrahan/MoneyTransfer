@@ -71,6 +71,23 @@ public class UserApiServiceImpl extends UserApiService {
     }
 
     @Override
+    public Response getAccountById(long id, long accountId, SecurityContext securityContext) throws NotFoundException {
+        if (!DatabaseReplica.getUserHashMap().containsKey(id)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
+        }
+        if (!DatabaseReplica.getUserHashMap().get(id).getAccountIdList().contains(accountId)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Account cannot found.")).build();
+        }
+
+        try {
+            String json = Util.objectToJson(DatabaseReplica.getAccountHashMap().get(accountId));
+            return Response.status(200).entity(json).build();
+        } catch (JsonProcessingException e) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, e.toString())).build();
+        }
+    }
+
+    @Override
     public Response updateUser(String  body, long id, SecurityContext securityContext) throws NotFoundException {
         // do some magic!
         return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();

@@ -3,6 +3,7 @@ package com.revolut.bugrahan.api;
 import com.revolut.bugrahan.api.NotFoundException;
 import com.revolut.bugrahan.api.UserApiService;
 import com.revolut.bugrahan.factories.UserApiServiceFactory;
+import com.revolut.bugrahan.model.Account;
 import com.revolut.bugrahan.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -90,6 +91,23 @@ public class UserApi  {
             throws com.revolut.bugrahan.api.NotFoundException {
         return delegate.getUserById(id,securityContext);
     }
+
+    @GET
+    @Path("/{id}/{accountId}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Operation(summary = "Get user's account by account id", description = "", tags = {"user"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Account.class))),
+            @ApiResponse(responseCode = "404", description = "User not found")})
+    public Response getAccountById(@Parameter(description = "User ID", required = true) @PathParam("id") long id,
+                                   @Parameter(description = "Account ID", required = true) @PathParam("accountId") long accountId,
+                                   @Context SecurityContext securityContext)
+            throws com.revolut.bugrahan.api.NotFoundException {
+        return delegate.getAccountById(id, accountId, securityContext);
+    }
+
+
     @PUT
     @Path("/{id}")
     @Consumes({ "*/*" })
