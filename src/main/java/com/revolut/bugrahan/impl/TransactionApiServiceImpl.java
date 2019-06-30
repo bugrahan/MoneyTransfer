@@ -120,6 +120,8 @@ public class TransactionApiServiceImpl extends TransactionApiService {
         DatabaseReplica.getTransactionHashMap().put((long)size+1, transaction);
         Account senderAccount = DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId());
         senderAccount.setBalance(senderAccount.getBalance() - transaction.getAmount());
+        User sender = DatabaseReplica.getUserHashMap().get(senderAccount.getOwnerId());
+        sender.setRemainingTransferLimit(sender.getRemainingTransferLimit() - transaction.getAmount());
         Account receiverAccount = DatabaseReplica.getAccountHashMap().get(transaction.getReceiverAccountId());
         receiverAccount.setBalance(receiverAccount.getBalance() + transaction.getAmount());
     }

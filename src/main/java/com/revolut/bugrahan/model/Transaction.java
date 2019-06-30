@@ -35,7 +35,7 @@ public class Transaction {
     }
 
     public long getReceiverAccountId() {
-        return getReceiverAccountId();
+        return receiverAccountId;
     }
 
     public double getAmount() {
