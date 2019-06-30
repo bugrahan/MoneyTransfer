@@ -83,14 +83,20 @@ public class AccountApiTest extends JerseyTest {
     }
 
     @Test
-    public void testDeleteUser_exist() {
-        Response response = target.path("user/1000").request(MediaType.APPLICATION_JSON).get();
+    public void deleteAccount_exist_and_withNoMoney() {
+        Response response = target.path("account/9021").request(MediaType.APPLICATION_JSON).delete();
         assertEquals(200, response.getStatus());
     }
 
     @Test
+    public void deleteAccount_exist_and_withMoney() {
+        Response response = target.path("account/9001").request(MediaType.APPLICATION_JSON).delete();
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
     public void testDeleteUser_does_not_exist() {
-        Response response = target.path("user/0000").request(MediaType.APPLICATION_JSON).get();
+        Response response = target.path("account/0000").request(MediaType.APPLICATION_JSON).delete();
         assertEquals(404, response.getStatus());
     }
 }

@@ -57,8 +57,11 @@ public class DatabaseReplica {
         accountHashMap.put(a4.getId(), a4);
         accountHashMap.put(a5.getId(), a5);
 
-        Account a6 = new Account(9021L, 9000.02, Currency.GBP, u1.getId());
-        //u3.setAccountIdList(Arrays.asList(a6.getId()));
+        Account a6 = new Account(9021L, 0, Currency.GBP, u1.getId());
+        arrayList = new ArrayList();
+        arrayList.add(a6);
+        u3.setAccountIdList(arrayList);
+        accountHashMap.put(a6.getId(), a6);
 
         Transaction t1 = new Transaction(transactionHashMap.size()+1, 333, 444, 21, "GBP");
         transactionHashMap.put(t1.getId(), t1);

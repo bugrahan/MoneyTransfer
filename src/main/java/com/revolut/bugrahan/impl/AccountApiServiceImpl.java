@@ -50,10 +50,12 @@ public class AccountApiServiceImpl extends AccountApiService {
         if (!DatabaseReplica.getAccountHashMap().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Account cannot found.")).build();
         } else {
-            long ownerId = DatabaseReplica.getAccountHashMap().get(id).getOwnerId();
+            Account accountWillDelete = DatabaseReplica.getAccountHashMap().get(id);
+            if (accountWillDelete.getBalance() != 0) {
+                return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Account with money in it cannot be deleted.")).build();
+            }
             DatabaseReplica.getAccountHashMap().remove(id);
-
-            DatabaseReplica.getUserHashMap().get(ownerId).deleteAccountIdFromAccountIdList(id);
+            DatabaseReplica.getUserHashMap().get(accountWillDelete.getOwnerId()).deleteAccountIdFromAccountIdList(id);
             return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "Account deleted!")).build();
 
         }
