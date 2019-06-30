@@ -46,7 +46,8 @@ public class AccountApi {
 
 
     @POST
-    @Consumes
+    @Consumes("application/json")
+    @Produces("application/json")
     @Operation(summary = "Create account.", description = "", tags={ "account" })
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successful operation.")})
     public Response createAccount(@Parameter(description = "Created account object." ,required=true) String body,
@@ -57,6 +58,8 @@ public class AccountApi {
 
     @DELETE
     @Path("/{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
     @Operation(summary = "Delete account.", description = "", tags = {"account"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Invalid account ID supplied."),
@@ -69,7 +72,8 @@ public class AccountApi {
 
     @GET
     @Path("/{id}")
-    @Produces({"application/json"})
+    @Consumes("application/json")
+    @Produces("application/json")
     @Operation(summary = "Get account by ID.", description = "", tags = {"account"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation.", content = @Content(schema = @Schema(implementation = Account.class))),
@@ -83,7 +87,8 @@ public class AccountApi {
 
     @PUT
     @Path("/{id}")
-    @Consumes
+    @Consumes("application/json")
+    @Produces("application/json")
     @Operation(summary = "Update account.", description = "", tags = {"account"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Invalid account ID supplied."),

@@ -63,8 +63,8 @@ public class UserApi  {
 
     @DELETE
     @Path("/{id}")
-
-
+    @Consumes("application/json")
+    @Produces("application/json")
     @Operation(summary = "Delete user", description = "This can only be done by the logged in user.", tags={ "user" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Invalid username supplied"),
@@ -77,8 +77,8 @@ public class UserApi  {
     }
     @GET
     @Path("/{id}")
-
-    @Produces({ "application/json" })
+    @Consumes("application/json")
+    @Produces("application/json")
     @Operation(summary = "Get user by user id", description = "", tags={ "user" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = User.class))),
@@ -110,8 +110,8 @@ public class UserApi  {
 
     @PUT
     @Path("/{id}")
-    @Consumes({ "*/*" })
-
+    @Consumes("application/json")
+    @Produces("application/json")
     @Operation(summary = "Updated user", description = "xxx", tags={ "user" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Invalid user supplied"),
