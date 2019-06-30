@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class TransactionApiServiceImpl extends TransactionApiService {
     @Override
-    public Response createTransaction(String body, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response createTransaction(String body, SecurityContext securityContext) throws NotFoundException {
         // do some magic!
         ObjectMapper mapper = new ObjectMapper();
         Transaction transaction;

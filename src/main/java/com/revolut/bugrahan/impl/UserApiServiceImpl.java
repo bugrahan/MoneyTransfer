@@ -20,7 +20,7 @@ import java.util.Map;
 public class UserApiServiceImpl extends UserApiService {
 
     @Override
-    public Response createUser(String body, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response createUser(String body, SecurityContext securityContext) throws NotFoundException {
         ObjectMapper mapper = new ObjectMapper();
         User user;
         try {
@@ -43,7 +43,7 @@ public class UserApiServiceImpl extends UserApiService {
     }
 
     @Override
-    public Response deleteUser(long id, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response deleteUser(long id, SecurityContext securityContext) throws NotFoundException {
         if (!DatabaseReplica.getUserHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
         } else {
@@ -87,7 +87,7 @@ public class UserApiServiceImpl extends UserApiService {
     }
 
     @Override
-    public Response updateUser(String  body, long id, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response updateUser(String  body, long id, SecurityContext securityContext) throws NotFoundException {
         if (!DatabaseReplica.getUserHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
         }

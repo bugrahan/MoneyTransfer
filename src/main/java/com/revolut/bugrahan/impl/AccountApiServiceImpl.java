@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class AccountApiServiceImpl extends AccountApiService {
 
     @Override
-    public Response createAccount(String  body, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response createAccount(String  body, SecurityContext securityContext) throws NotFoundException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = null;
         try {
@@ -47,7 +47,7 @@ public class AccountApiServiceImpl extends AccountApiService {
         return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "Account created.")).build();
     }
     @Override
-    public Response deleteAccount(long id, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response deleteAccount(long id, SecurityContext securityContext) throws NotFoundException {
         if (!DatabaseReplica.getAccountHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Account cannot found.")).build();
         } else {
@@ -75,7 +75,7 @@ public class AccountApiServiceImpl extends AccountApiService {
         }
     }
     @Override
-    public Response updateAccount(String body, long id, SecurityContext securityContext) throws NotFoundException {
+    public synchronized Response updateAccount(String body, long id, SecurityContext securityContext) throws NotFoundException {
         if (!DatabaseReplica.getAccountHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Account cannot found.")).build();
         }
