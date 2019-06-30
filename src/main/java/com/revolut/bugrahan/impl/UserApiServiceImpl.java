@@ -2,7 +2,7 @@ package com.revolut.bugrahan.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revolut.bugrahan.api.utlis.Util;
+import com.revolut.bugrahan.utlis.Util;
 import com.revolut.bugrahan.api.ApiResponseMessage;
 import com.revolut.bugrahan.api.NotFoundException;
 import com.revolut.bugrahan.api.UserApiService;
@@ -91,10 +91,9 @@ public class UserApiServiceImpl extends UserApiService {
         if (!DatabaseReplica.getUserHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
         }
-        ObjectMapper mapper = new ObjectMapper();
         HashMap<String, Object> userWithNewFields;
         try {
-            userWithNewFields = mapper.readValue(body, HashMap.class);
+            userWithNewFields = Util.jsonToHashMap(body);
         } catch (IOException e) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, e.toString())).build();
         }

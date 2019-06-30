@@ -41,6 +41,14 @@ public class Account {
         this.balance = balance;
     }
 
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public void setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

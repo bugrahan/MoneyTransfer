@@ -99,4 +99,40 @@ public class AccountApiTest extends JerseyTest {
         Response response = target.path("account/0000").request(MediaType.APPLICATION_JSON).delete();
         assertEquals(404, response.getStatus());
     }
+
+    @Test
+    public void updateAccount_currency() {
+        target.path("user").request().post(Entity.json("{\"id\":3000,\"name\":\"Julia Roberts\",\"userType\":\"PREMIUM\"}"));
+        target.path("account").request().post(Entity.json("{\"id\":9301,\"balance\":100,\"currency\":\"GBP\",\"ownerId\":3000}"));
+        target.path("account").request().post(Entity.json("{\"id\":9302,\"balance\":100,\"currency\":\"TRY\",\"ownerId\":3000}"));
+        Response response = target.path("account/9302").request().put(Entity.json("{\"currency\":\"EUR\"}"));
+        assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    public void updateAccount_withId() {
+        target.path("user").request().post(Entity.json("{\"id\":3010,\"name\":\"Julia Roberts\",\"userType\":\"PREMIUM\"}"));
+        target.path("account").request().post(Entity.json("{\"id\":9311,\"balance\":100,\"currency\":\"GBP\",\"ownerId\":3010}"));
+        target.path("account").request().post(Entity.json("{\"id\":9312,\"balance\":100,\"currency\":\"TRY\",\"ownerId\":3010}"));
+        Response response = target.path("account/9312").request().put(Entity.json("{\"id\":9312,\"currency\":\"EUR\"}"));
+        assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    public void updateUser_withWrongId() {
+        target.path("user").request().post(Entity.json("{\"id\":3020,\"name\":\"Julia Roberts\",\"userType\":\"PREMIUM\"}"));
+        target.path("account").request().post(Entity.json("{\"id\":9321,\"balance\":100,\"currency\":\"GBP\",\"ownerId\":3020}"));
+        target.path("account").request().post(Entity.json("{\"id\":9322,\"balance\":100,\"currency\":\"TRY\",\"ownerId\":3020}"));
+        Response response = target.path("account/9322").request().put(Entity.json("{\"id\":9320,\"currency\":\"EUR\"}"));
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    public void updateUser_withWrongSameCurrency() {
+        target.path("user").request().post(Entity.json("{\"id\":3030,\"name\":\"Julia Roberts\",\"userType\":\"PREMIUM\"}"));
+        target.path("account").request().post(Entity.json("{\"id\":9331,\"balance\":100,\"currency\":\"GBP\",\"ownerId\":3030}"));
+        target.path("account").request().post(Entity.json("{\"id\":9332,\"balance\":100,\"currency\":\"TRY\",\"ownerId\":3030}"));
+        Response response = target.path("account/9332").request().put(Entity.json("{\"currency\":\"GBP\"}"));
+        assertEquals(404, response.getStatus());
+    }
 }
