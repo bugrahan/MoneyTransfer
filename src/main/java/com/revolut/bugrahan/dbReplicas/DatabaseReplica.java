@@ -38,37 +38,25 @@ public class DatabaseReplica {
 
         Account a1 = new Account(9001L, 1289.02, Currency.EUR, u1.getId());
         Account a2 = new Account(9002L, 5000.02, Currency.TRY, u1.getId());
-        ArrayList arrayList = new ArrayList();
-        arrayList.add(a1.getId());
-        arrayList.add(a2.getId());
-        u1.setAccountIdList(arrayList);
+        u1.addAccountIdsToAccountIdList(a1.getId(), a2.getId());
         accountHashtable.put(a1.getId(), a1);
         accountHashtable.put(a2.getId(), a2);
 
         Account a3 = new Account(9011L, 2989.00, Currency.GBP, u1.getId());
         Account a4 = new Account(9012L, 554.67, Currency.TRY, u1.getId());
         Account a5 = new Account(9013L, 15030.54, Currency.EUR, u1.getId());
-        arrayList = new ArrayList();
-        arrayList.add(a3.getId());
-        arrayList.add(a4.getId());
-        arrayList.add(a5.getId());
-        u2.setAccountIdList(arrayList);
+        u2.addAccountIdsToAccountIdList(a3.getId(), a4.getId(), a5.getId());
         accountHashtable.put(a3.getId(), a3);
         accountHashtable.put(a4.getId(), a4);
         accountHashtable.put(a5.getId(), a5);
 
         Account a6 = new Account(9021L, 0, Currency.GBP, u1.getId());
-        arrayList = new ArrayList();
-        arrayList.add(a6.getId());
-        u3.setAccountIdList(arrayList);
+        u3.addAccountIdsToAccountIdList(a6.getId());
         accountHashtable.put(a6.getId(), a6);
 
         Account a7 = new Account(9031L, 0, Currency.EUR, u4.getId());
         Account a8 = new Account(9032L, 0, Currency.GBP, u4.getId());
-        arrayList = new ArrayList();
-        arrayList.add(a7.getId());
-        arrayList.add(a8.getId());
-        u4.setAccountIdList(arrayList);
+        u4.addAccountIdsToAccountIdList(a7.getId(), a8.getId());
         accountHashtable.put(a7.getId(), a7);
         accountHashtable.put(a8.getId(), a8);
 

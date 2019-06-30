@@ -1,6 +1,7 @@
 package com.revolut.bugrahan.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.revolut.bugrahan.Main;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class User {
     private long id;
     private String name;
     private ArrayList<Long> accountIdList;
+    private ArrayList<String> accountUrlList;
     private UserType userType;
     private double remainingTransferLimit;
 
@@ -22,6 +24,7 @@ public class User {
         this.name = name;
         this.userType = userType;
         this.accountIdList = new ArrayList<>();
+        this.accountUrlList = new ArrayList<>();
         this.remainingTransferLimit = userType.getTransferLimit();
     }
 
@@ -44,7 +47,8 @@ public class User {
 
     public void addAccountIdsToAccountIdList(long... accountIds) {
         for (long accountId : accountIds) {
-            this.getAccountIdList().add(accountId);
+            this.accountIdList.add(accountId);
+            this.accountUrlList.add(Main.BASE_URI + "user/" + id + "/" + accountId);
         }
     }
 
@@ -65,6 +69,10 @@ public class User {
 
     public void setRemainingTransferLimit(double remainingTransferLimit) {
         this.remainingTransferLimit = remainingTransferLimit;
+    }
+
+    public ArrayList<String> getAccountUrlList() {
+        return accountUrlList;
     }
 
     @Override
