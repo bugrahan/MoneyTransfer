@@ -60,7 +60,7 @@ public class DatabaseReplica {
         accountHashtable.put(a7.getId(), a7);
         accountHashtable.put(a8.getId(), a8);
 
-        Transaction t1 = new Transaction(transactionHashtable.size()+1, 333, 444, 21, "GBP");
+        Transaction t1 = new Transaction(333, 444, 21, "GBP");
         transactionHashtable.put(t1.getId(), t1);
     }
 

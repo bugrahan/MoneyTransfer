@@ -2,6 +2,7 @@ package com.revolut.bugrahan.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.revolut.bugrahan.dbReplicas.DatabaseReplica;
 
 import java.util.Objects;
 
@@ -13,12 +14,11 @@ public class Transaction {
     private String currencyCode;
 
     @JsonCreator
-    public Transaction(@JsonProperty(value = "id", required = true) long id,
-                       @JsonProperty(value = "senderAccountId", required = true) long senderAccountId,
+    public Transaction(@JsonProperty(value = "senderAccountId", required = true) long senderAccountId,
                        @JsonProperty(value = "receiverAccountId", required = true) long receiverAccountId,
                        @JsonProperty(value = "amount", required = true) double amount,
                        @JsonProperty(value = "currencyCode", required = true) String currencyCode) {
-        this.id = id;
+        this.id = DatabaseReplica.getTransactionHashtable().size() + 1;
         this.senderAccountId = senderAccountId;
         this.receiverAccountId = receiverAccountId;
         this.amount = amount;

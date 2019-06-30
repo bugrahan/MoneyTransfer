@@ -80,98 +80,98 @@ public class TransactionApiTest extends JerseyTest {
 
     @Test
     public void isSenderAccountExists_thereIsSuchAccount() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 10000, "EUR");
+        Transaction transaction = new Transaction(12021, 12011, 10000, "EUR");
         assertTrue(service.isSenderAccountExists(transaction));
     }
 
     @Test
     public void isSenderAccountExists_thereIsNoSuchAccount() {
-        Transaction transaction = new Transaction(1, 0, 12011, 10000, "EUR");
+        Transaction transaction = new Transaction(0, 12011, 10000, "EUR");
         assertFalse(service.isSenderAccountExists(transaction));
     }
 
 
     @Test
     public void isReceiverAccountExists_thereIsSuchAccount() {
-        Transaction transaction = new Transaction(1, 12021, 0, 10000, "EUR");
+        Transaction transaction = new Transaction(12021, 0, 10000, "EUR");
         assertFalse(service.isReceiverAccountExists(transaction));
     }
 
     @Test
     public void isReceiverAccountExists_thereIsNoSuchAccount() {
-        Transaction transaction = new Transaction(1, 12021, 0, 10000, "EUR");
+        Transaction transaction = new Transaction(12021, 0, 10000, "EUR");
         assertFalse(service.isReceiverAccountExists(transaction));
     }
 
     @Test
     public void isTransactionValid_senderDoesntHaveEnoughLimit() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 10000, "EUR");
+        Transaction transaction = new Transaction(12021, 12011, 10000, "EUR");
         assertFalse(service.hasSenderEnoughLimit(transaction));
     }
 
     @Test
     public void isTransactionCurrenciesMatch_matches() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 10000, "EUR");
+        Transaction transaction = new Transaction(12021, 12011, 10000, "EUR");
         assertTrue(service.isTransactionCurrenciesMatch(transaction));
     }
     @Test
     public void isTransactionCurrenciesMatch_doesnt_match() {
-        Transaction transaction = new Transaction(1, 12022, 12011, 10000, "EUR");
+        Transaction transaction = new Transaction(12022, 12011, 10000, "EUR");
         assertFalse(service.isTransactionCurrenciesMatch(transaction));
     }
 
     @Test
     public void isTransactionCurrencyMatchToSendersAccount_matches() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 10000, "EUR");
+        Transaction transaction = new Transaction(12021, 12011, 10000, "EUR");
         assertTrue(service.isTransactionCurrencyMatchToSendersAccount(transaction));
     }
 
     @Test
     public void isTransactionCurrencyMatchToSendersAccount_doesnt_match() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 10000, "GBP");
+        Transaction transaction = new Transaction(12021, 12011, 10000, "GBP");
         assertFalse(service.isTransactionCurrencyMatchToSendersAccount(transaction));
     }
 
     @Test
     public void isTransactionCurrencyMatchToReceiversAccount_matches() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 10000, "EUR");
+        Transaction transaction = new Transaction(12021, 12011, 10000, "EUR");
         assertTrue(service.isTransactionCurrencyMatchToSendersAccount(transaction));
     }
 
     @Test
     public void isTransactionCurrencyMatchToReceiversAccount_doesnt_match() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 10000, "GBP");
+        Transaction transaction = new Transaction(12021, 12011, 10000, "GBP");
         assertFalse(service.isTransactionCurrencyMatchToSendersAccount(transaction));
     }
 
     @Test
     public void hasSenderEnoughLimit_yes() {
-        Transaction transaction = new Transaction(1, 12022, 12012, 100, "EUR");
+        Transaction transaction = new Transaction(12022, 12012, 100, "EUR");
         assertTrue(service.hasSenderEnoughLimit(transaction));
     }
 
     @Test
     public void hasSenderEnoughLimit_no() {
-        Transaction transaction = new Transaction(1, 12022, 12012, 5000, "EUR");
+        Transaction transaction = new Transaction(12022, 12012, 5000, "EUR");
         assertFalse(service.hasSenderEnoughLimit(transaction));
     }
 
 
     @Test
     public void isThereEnoughMoneyInTheSendersAccount_yes() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 10000, "EUR");
+        Transaction transaction = new Transaction(12021, 12011, 10000, "EUR");
         assertTrue(service.isThereEnoughMoneyInTheSendersAccount(transaction));
     }
 
     @Test
     public void isThereEnoughMoneyInTheSendersAccount_no() {
-        Transaction transaction = new Transaction(1, 12011, 12021, 10000, "EUR");
+        Transaction transaction = new Transaction(12011, 12021, 10000, "EUR");
         assertFalse(service.isThereEnoughMoneyInTheSendersAccount(transaction));
     }
 
     @Test
     public void applyTransaction() {
-        Transaction transaction = new Transaction(1, 12021, 12011, 1000, "EUR");
+        Transaction transaction = new Transaction(12021, 12011, 1000, "EUR");
         double chandlersBalance = DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getBalance();
         double joeysBalance = DatabaseReplica.getAccountHashtable().get(transaction.getReceiverAccountId()).getBalance();
         double chandlersLimit = DatabaseReplica.getUserHashtable().get(DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getOwnerId()).getRemainingTransferLimit();
