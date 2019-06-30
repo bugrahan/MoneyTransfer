@@ -66,16 +66,16 @@ public class TransactionApiTest extends JerseyTest {
         Account ra_try = new Account(12032, 0, Currency.TRY, 7003);
         rachel.addAccountIdsToAccountIdList(12031, 12032);
 
-        DatabaseReplica.getAccountHashMap().put(jo_eur.getId(), jo_eur);
-        DatabaseReplica.getAccountHashMap().put(ch_eur.getId(), ch_eur);
-        DatabaseReplica.getAccountHashMap().put(ch_gbp.getId(), ch_gbp);
-        DatabaseReplica.getAccountHashMap().put(ch_try.getId(), ch_try);
-        DatabaseReplica.getAccountHashMap().put(ra_gbp.getId(), ra_gbp);
-        DatabaseReplica.getAccountHashMap().put(ra_try.getId(), ra_try);
+        DatabaseReplica.getAccountHashtable().put(jo_eur.getId(), jo_eur);
+        DatabaseReplica.getAccountHashtable().put(ch_eur.getId(), ch_eur);
+        DatabaseReplica.getAccountHashtable().put(ch_gbp.getId(), ch_gbp);
+        DatabaseReplica.getAccountHashtable().put(ch_try.getId(), ch_try);
+        DatabaseReplica.getAccountHashtable().put(ra_gbp.getId(), ra_gbp);
+        DatabaseReplica.getAccountHashtable().put(ra_try.getId(), ra_try);
 
-        DatabaseReplica.getUserHashMap().put(joey.getId(), joey);
-        DatabaseReplica.getUserHashMap().put(chandler.getId(), chandler);
-        DatabaseReplica.getUserHashMap().put(rachel.getId(), rachel);
+        DatabaseReplica.getUserHashtable().put(joey.getId(), joey);
+        DatabaseReplica.getUserHashtable().put(chandler.getId(), chandler);
+        DatabaseReplica.getUserHashtable().put(rachel.getId(), rachel);
     }
 
     @Test
@@ -172,13 +172,13 @@ public class TransactionApiTest extends JerseyTest {
     @Test
     public void applyTransaction() {
         Transaction transaction = new Transaction(1, 12021, 12011, 1000, "EUR");
-        double chandlersBalance = DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getBalance();
-        double joeysBalance = DatabaseReplica.getAccountHashMap().get(transaction.getReceiverAccountId()).getBalance();
-        double chandlersLimit = DatabaseReplica.getUserHashMap().get(DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getOwnerId()).getRemainingTransferLimit();
+        double chandlersBalance = DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getBalance();
+        double joeysBalance = DatabaseReplica.getAccountHashtable().get(transaction.getReceiverAccountId()).getBalance();
+        double chandlersLimit = DatabaseReplica.getUserHashtable().get(DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getOwnerId()).getRemainingTransferLimit();
         service.applyTransaction(transaction);
-        double chandlersNewBalance = DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getBalance();
-        double joeysNewBalance = DatabaseReplica.getAccountHashMap().get(transaction.getReceiverAccountId()).getBalance();
-        double chandlersNewLimit = DatabaseReplica.getUserHashMap().get(DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getOwnerId()).getRemainingTransferLimit();
+        double chandlersNewBalance = DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getBalance();
+        double joeysNewBalance = DatabaseReplica.getAccountHashtable().get(transaction.getReceiverAccountId()).getBalance();
+        double chandlersNewLimit = DatabaseReplica.getUserHashtable().get(DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getOwnerId()).getRemainingTransferLimit();
         assertEquals(chandlersBalance - 1000, chandlersNewBalance, 0.001);
         assertEquals(joeysBalance + 1000, joeysNewBalance, 0.001);
         assertEquals(chandlersLimit - 1000, chandlersNewLimit, 0.001);

@@ -65,34 +65,34 @@ public class TransactionApiServiceImpl extends TransactionApiService {
 
     @Override
     public boolean isSenderAccountExists(Transaction transaction) {
-        return DatabaseReplica.getAccountHashMap().containsKey(transaction.getSenderAccountId());
+        return DatabaseReplica.getAccountHashtable().containsKey(transaction.getSenderAccountId());
     }
 
     @Override
     public boolean isReceiverAccountExists(Transaction transaction) {
-        return DatabaseReplica.getAccountHashMap().containsKey(transaction.getReceiverAccountId());
+        return DatabaseReplica.getAccountHashtable().containsKey(transaction.getReceiverAccountId());
     }
 
     @Override
     public boolean isTransactionCurrenciesMatch(Transaction transaction) {
-        return DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getCurrency().equals(
-                DatabaseReplica.getAccountHashMap().get(transaction.getReceiverAccountId()).getCurrency());
+        return DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getCurrency().equals(
+                DatabaseReplica.getAccountHashtable().get(transaction.getReceiverAccountId()).getCurrency());
     }
 
     @Override
     public boolean isTransactionCurrencyMatchToSendersAccount(Transaction transaction) {
-        return DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getCurrency().getValue().equals(transaction.getCurrencyCode());
+        return DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getCurrency().getValue().equals(transaction.getCurrencyCode());
     }
 
     @Override
     public boolean isTransactionCurrencyMatchToReceiversAccount(Transaction transaction) {
-        return DatabaseReplica.getAccountHashMap().get(transaction.getReceiverAccountId()).getCurrency().getValue().equals(transaction.getCurrencyCode());
+        return DatabaseReplica.getAccountHashtable().get(transaction.getReceiverAccountId()).getCurrency().getValue().equals(transaction.getCurrencyCode());
     }
 
     @Override
     public boolean hasSenderEnoughLimit(Transaction transaction) {
-        Account senderAccount = DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId());
-        User sender = DatabaseReplica.getUserHashMap().get(senderAccount.getOwnerId());
+        Account senderAccount = DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId());
+        User sender = DatabaseReplica.getUserHashtable().get(senderAccount.getOwnerId());
         double limit = sender.getRemainingTransferLimit();
         double amountInGBP = getAmountInGBP(transaction.getAmount(), transaction.getCurrencyCode());
         return limit >= amountInGBP;
@@ -100,7 +100,7 @@ public class TransactionApiServiceImpl extends TransactionApiService {
 
     @Override
     public boolean isThereEnoughMoneyInTheSendersAccount(Transaction transaction) {
-        return DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId()).getBalance() >= transaction.getAmount();
+        return DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId()).getBalance() >= transaction.getAmount();
     }
 
 
@@ -116,13 +116,13 @@ public class TransactionApiServiceImpl extends TransactionApiService {
 
 
     public void applyTransaction(Transaction transaction) {
-        int size = DatabaseReplica.getTransactionHashMap().size();
-        DatabaseReplica.getTransactionHashMap().put((long)size+1, transaction);
-        Account senderAccount = DatabaseReplica.getAccountHashMap().get(transaction.getSenderAccountId());
+        int size = DatabaseReplica.getTransactionHashtable().size();
+        DatabaseReplica.getTransactionHashtable().put((long)size+1, transaction);
+        Account senderAccount = DatabaseReplica.getAccountHashtable().get(transaction.getSenderAccountId());
         senderAccount.setBalance(senderAccount.getBalance() - transaction.getAmount());
-        User sender = DatabaseReplica.getUserHashMap().get(senderAccount.getOwnerId());
+        User sender = DatabaseReplica.getUserHashtable().get(senderAccount.getOwnerId());
         sender.setRemainingTransferLimit(sender.getRemainingTransferLimit() - transaction.getAmount());
-        Account receiverAccount = DatabaseReplica.getAccountHashMap().get(transaction.getReceiverAccountId());
+        Account receiverAccount = DatabaseReplica.getAccountHashtable().get(transaction.getReceiverAccountId());
         receiverAccount.setBalance(receiverAccount.getBalance() + transaction.getAmount());
     }
 

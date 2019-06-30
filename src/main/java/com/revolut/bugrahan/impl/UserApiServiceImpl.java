@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class UserApiServiceImpl extends UserApiService {
 
@@ -29,29 +28,28 @@ public class UserApiServiceImpl extends UserApiService {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, e.toString())).build();
         }
 
-        HashMap<Long, User> userMap = DatabaseReplica.getUserHashMap();
 
         if (user == null) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot be created.")).build();
         } else if(user.getId() == 0 || StringUtils.isEmpty(user.getName()) || user.getUserType() == null) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Missing information.")).build();
-        } else if (userMap.containsKey(user.getId())) {
+        } else if (DatabaseReplica.getUserHashtable().containsKey(user.getId())) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User already exists.")).build();
         }
 
-        DatabaseReplica.getUserHashMap().put(user.getId(), user);
+        DatabaseReplica.getUserHashtable().put(user.getId(), user);
         return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "User created.")).build();
     }
 
     @Override
     public Response deleteUser(long id, SecurityContext securityContext) throws NotFoundException {
-        if (!DatabaseReplica.getUserHashMap().containsKey(id)) {
+        if (!DatabaseReplica.getUserHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
         } else {
             if (isBalanceGreaterThanZero(id)) {
                 return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User with balance cannot be deleted.")).build();
             }
-            DatabaseReplica.getUserHashMap().remove(id);
+            DatabaseReplica.getUserHashtable().remove(id);
             return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "User deleted!")).build();
 
         }
@@ -59,11 +57,11 @@ public class UserApiServiceImpl extends UserApiService {
 
     @Override
     public Response getUserById(long id, SecurityContext securityContext) throws NotFoundException {
-        if (!DatabaseReplica.getUserHashMap().containsKey(id)) {
+        if (!DatabaseReplica.getUserHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
         }
         try {
-            String json = Util.objectToJson(DatabaseReplica.getUserHashMap().get(id));
+            String json = Util.objectToJson(DatabaseReplica.getUserHashtable().get(id));
             return Response.status(200).entity(json).build();
         } catch (JsonProcessingException e) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, e.toString())).build();
@@ -72,15 +70,15 @@ public class UserApiServiceImpl extends UserApiService {
 
     @Override
     public Response getAccountById(long id, long accountId, SecurityContext securityContext) throws NotFoundException {
-        if (!DatabaseReplica.getUserHashMap().containsKey(id)) {
+        if (!DatabaseReplica.getUserHashtable().containsKey(id)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
         }
-        if (!DatabaseReplica.getUserHashMap().get(id).getAccountIdList().contains(accountId)) {
+        if (!DatabaseReplica.getUserHashtable().get(id).getAccountIdList().contains(accountId)) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "Account cannot found.")).build();
         }
 
         try {
-            String json = Util.objectToJson(DatabaseReplica.getAccountHashMap().get(accountId));
+            String json = Util.objectToJson(DatabaseReplica.getAccountHashtable().get(accountId));
             return Response.status(200).entity(json).build();
         } catch (JsonProcessingException e) {
             return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, e.toString())).build();
@@ -95,8 +93,8 @@ public class UserApiServiceImpl extends UserApiService {
 
     @Override
     public boolean isBalanceGreaterThanZero(long userId) {
-        for (Long accountId : DatabaseReplica.getUserHashMap().get(userId).getAccountIdList()) {
-            if (DatabaseReplica.getAccountHashMap().get(accountId).getBalance() > 0) {
+        for (Long accountId : DatabaseReplica.getUserHashtable().get(userId).getAccountIdList()) {
+            if (DatabaseReplica.getAccountHashtable().get(accountId).getBalance() > 0) {
                 return true;
             }
         }
