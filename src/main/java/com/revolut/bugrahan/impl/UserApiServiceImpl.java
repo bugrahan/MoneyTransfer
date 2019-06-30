@@ -2,8 +2,7 @@ package com.revolut.bugrahan.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.revolut.bugrahan.Util;
+import com.revolut.bugrahan.api.utlis.Util;
 import com.revolut.bugrahan.api.ApiResponseMessage;
 import com.revolut.bugrahan.api.NotFoundException;
 import com.revolut.bugrahan.api.UserApiService;
@@ -13,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 
 public class UserApiServiceImpl extends UserApiService {

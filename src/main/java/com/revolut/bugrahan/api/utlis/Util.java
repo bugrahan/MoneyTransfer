@@ -1,4 +1,4 @@
-package com.revolut.bugrahan;
+package com.revolut.bugrahan.api.utlis;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -2,13 +2,12 @@ package com.revolut.bugrahan.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revolut.bugrahan.Util;
+import com.revolut.bugrahan.api.utlis.Util;
 import com.revolut.bugrahan.api.AccountApiService;
 import com.revolut.bugrahan.api.ApiResponseMessage;
 import com.revolut.bugrahan.api.NotFoundException;
 import com.revolut.bugrahan.dbReplicas.DatabaseReplica;
 import com.revolut.bugrahan.model.Account;
-import com.revolut.bugrahan.model.User;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
