@@ -1,7 +1,6 @@
 package com.revolut.bugrahan.impl;
 
 import com.revolut.bugrahan.Main;
-import com.revolut.bugrahan.api.AccountApiService;
 import com.revolut.bugrahan.api.UserApiService;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -105,5 +104,12 @@ public class UserApiTest extends JerseyTest {
     public void deleteUser_notExist() {
         Response response = target.path("user/0000").request(MediaType.APPLICATION_JSON).delete();
         assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    public void deleteUser_withNoAccount() {
+        target.path("user").request().post(Entity.json("{\"id\":1500,\"name\":\"Julia Roberts\",\"userType\":\"PREMIUM\"}"));
+        Response response = target.path("user/1500").request(MediaType.APPLICATION_JSON_TYPE).delete();
+        assertEquals(200, response.getStatus());
     }
 }
