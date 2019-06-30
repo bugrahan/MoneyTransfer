@@ -86,12 +86,12 @@ public class UserApiTest extends JerseyTest {
     @Test
     public void isBalanceGreaterThanZero_no() {
         UserApiService service = new UserApiServiceImpl();
-        assertFalse(service.isBalanceGreaterThanZero(1002L));
+        assertFalse(service.isBalanceGreaterThanZero(1003L));
     }
 
     @Test
     public void deleteUser_exist_withoutBalance() {
-        Response response = target.path("user/1002").request(MediaType.APPLICATION_JSON).delete();
+        Response response = target.path("user/1003").request(MediaType.APPLICATION_JSON).delete();
         assertEquals(200, response.getStatus());
     }
 
