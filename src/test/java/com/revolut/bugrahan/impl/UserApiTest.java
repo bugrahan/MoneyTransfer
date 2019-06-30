@@ -112,4 +112,23 @@ public class UserApiTest extends JerseyTest {
         Response response = target.path("user/1500").request(MediaType.APPLICATION_JSON_TYPE).delete();
         assertEquals(200, response.getStatus());
     }
+
+    @Test
+    public void updateUser_name() {
+        Response response = target.path("user/1000").request().put(Entity.json("{\"name\":\"Julia Roberts\"}"));
+        assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    public void updateUser_withId() {
+        Response response = target.path("user/1000").request().put(Entity.json("{\"id\":1000,\"name\":\"Dr. Watson\"}"));
+        assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    public void updateUser_withWrongId() {
+        Response response = target.path("user/1000").request().put(Entity.json("{\"id\":1001,\"name\":\"Julia Roberts\"}"));
+        assertEquals(404, response.getStatus());
+    }
+
 }

@@ -112,16 +112,13 @@ public class UserApi  {
     @Path("/{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    @Operation(summary = "Updated user", description = "xxx", tags={ "user" })
+    @Operation(summary = "Updated user", tags={ "user" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "400", description = "Invalid user supplied"),
-
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "404", description = "User not found") })
-    public Response updateUser(@Parameter(description = "Updated user object" ,required=true) String body
-
-            , @Parameter(description = "name that need to be updated",required=true) @PathParam("id") long id
-            , @Context SecurityContext securityContext)
-            throws NotFoundException {
+    public Response updateUser(@Parameter(description = "Updated user object" ,required=true) String body,
+                               @Parameter(description = "name that need to be updated",required=true) @PathParam("id") long id,
+                               @Context SecurityContext securityContext) throws NotFoundException {
         return delegate.updateUser(body,id,securityContext);
     }
 }

@@ -75,6 +75,14 @@ public class User {
         return accountUrlList;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -8,11 +8,14 @@ import com.revolut.bugrahan.api.NotFoundException;
 import com.revolut.bugrahan.api.UserApiService;
 import com.revolut.bugrahan.dbReplicas.DatabaseReplica;
 import com.revolut.bugrahan.model.User;
+import com.revolut.bugrahan.model.UserType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserApiServiceImpl extends UserApiService {
 
@@ -85,8 +88,35 @@ public class UserApiServiceImpl extends UserApiService {
 
     @Override
     public Response updateUser(String  body, long id, SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
-        return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+        if (!DatabaseReplica.getUserHashtable().containsKey(id)) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot found.")).build();
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, Object> userWithNewFields;
+        try {
+            userWithNewFields = mapper.readValue(body, HashMap.class);
+        } catch (IOException e) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, e.toString())).build();
+        }
+
+        if (userWithNewFields == null) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User cannot be updated.")).build();
+        } else if (userWithNewFields.containsKey("id") && Long.parseLong(userWithNewFields.get("id").toString()) != id) {
+            return Response.status(404).entity(new ApiResponseMessage(ApiResponseMessage.ERROR, "User id cannot be updated.")).build();
+        }
+
+        User updatedUser = DatabaseReplica.getUserHashtable().get(id);
+
+        for (Map.Entry<String, Object> stringObjectEntry : userWithNewFields.entrySet()) {
+            if (stringObjectEntry.getKey().equals("name")) {
+                updatedUser.setName(stringObjectEntry.getValue().toString());
+            } else if (stringObjectEntry.getKey().equals("userType")) {
+                updatedUser.setUserType(UserType.valueOf(stringObjectEntry.getValue().toString()));
+            }
+        }
+        DatabaseReplica.getUserHashtable().put(updatedUser.getId(), updatedUser);
+        return Response.status(200).entity(new ApiResponseMessage(ApiResponseMessage.OK, "User updated.")).build();
+
     }
 
     @Override
